@@ -17,7 +17,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            background-color: #f7f7f7;
+            background-color: #f4f4f4;
             margin: 0;
             padding: 20px;
         }
@@ -26,8 +26,8 @@
             text-align: center;
             margin-bottom: 30px;
             padding: 20px;
-            background-color: #4CAF50;
-            border-radius: 8px;
+            background-color: #00796b;
+            border-radius: 12px;
             color: white;
             width: 100%;
             max-width: 800px;
@@ -51,20 +51,22 @@
         }
 
         .card {
-            background-color: #fff;
             width: 300px;
-            height: 200px;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            cursor: pointer;
-            transition: transform 0.3s ease;
-            transform-style: preserve-3d;
-            position: relative;
-            text-align: center;
+            height: 400px;
+            perspective: 1000px;
+            transition: transform 0.6s;
         }
 
-        .card:hover {
-            transform: rotateY(10deg);
+        .card-inner {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.6s;
+        }
+
+        .card:hover .card-inner {
+            transform: rotateY(180deg);
         }
 
         .card .front, .card .back {
@@ -73,43 +75,43 @@
             left: 0;
             width: 100%;
             height: 100%;
-            border-radius: 10px;
             display: flex;
             align-items: center;
             justify-content: center;
+            border-radius: 12px;
             backface-visibility: hidden;
             padding: 20px;
+            text-align: center;
         }
 
         .card .front {
-            background-color: #4CAF50;
+            background-color: #00796b;
             color: white;
         }
 
         .card .back {
-            background-color: #f0f0f0;
+            background-color: #ffffff;
             color: #333;
             transform: rotateY(180deg);
-            display: none;
-        }
-
-        .card.show-back .back {
-            display: block;
         }
 
         .category {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 10px;
         }
 
         .question {
-            font-size: 18px;
+            font-size: 20px;
             font-weight: bold;
             margin-top: 10px;
         }
 
         .answer {
-            font-size: 16px;
+            font-size: 18px;
+            font-style: italic;
+            color: #00796b;
         }
 
     </style>
@@ -124,7 +126,7 @@
     </div>
 
     <div id="cards-container">
-        <!-- Os flashcards vão ser inseridos aqui dinamicamente -->
+        <!-- Flashcards serão inseridos dinamicamente aqui -->
     </div>
 
     <script>
@@ -161,6 +163,9 @@
             const card = document.createElement('div');
             card.className = 'card';
 
+            const cardInner = document.createElement('div');
+            cardInner.className = 'card-inner';
+
             // Criar frente do cartão
             const front = document.createElement('div');
             front.className = 'front';
@@ -174,14 +179,12 @@
             back.className = 'back';
             back.innerHTML = `<div class="answer">${resposta}</div>`;
 
-            // Adicionar ambos (frente e verso) ao cartão
-            card.appendChild(front);
-            card.appendChild(back);
+            // Adicionar frente e verso ao cartão
+            cardInner.appendChild(front);
+            cardInner.appendChild(back);
 
-            // Adicionar evento de clique para virar o cartão
-            card.addEventListener('click', () => {
-                card.classList.toggle('show-back');
-            });
+            // Adicionar o cardInner ao card
+            card.appendChild(cardInner);
 
             // Adicionar o cartão ao container
             document.getElementById('cards-container').appendChild(card);
