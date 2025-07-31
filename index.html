@@ -1,1 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atividade Flashcards - [Nome do Aluno]</title>
+    <style>
+        /* Resetando margem e padding para garantir que a estrutura fique certa */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Definindo o layout e a aparência da página */
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        /* Cabeçalho com o nome do aluno e a data */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: #4CAF50;
+            border-radius: 8px;
+            color: white;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        /* Estilo para os cartões */
+        .card {
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+            padding: 20px;
+            margin: 10px;
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        /* Efeito de hover nos cartões */
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .category {
+            color: #555;
+            font-size: 14px;
+            margin-bottom: 10px;
+        }
+
+        .question {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .answer {
+            display: none;
+            color: #333;
+            margin-top: 10px;
+            font-size: 16px;
+        }
+
+        .answer.show {
+            display: block;
+        }
+
+        /* Container dos cartões */
+        #cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">
+        <h1>Flashcards de [Nome do Aluno]</h1>
+        <p>Atividade de Programação Web - 2,0 pontos</p>
+        <p>Data: 31/07/2025</p>
+    </div>
+
+    <!-- Container onde os cartões serão inseridos -->
+    <div id="cards-container"></div>
+
+    <!-- Link para o arquivo JavaScript onde as perguntas estão armazenadas -->
+    <script src="perguntas.js"></script>
+
+    <script>
+        // Função para criar e exibir cartões
+        function criaCartao(categoria, pergunta, resposta) {
+            // Criar elemento do cartão
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            // Criar elemento para categoria
+            const cardCategory = document.createElement('div');
+            cardCategory.className = 'category';
+            cardCategory.textContent = categoria;
+
+            // Criar elemento para pergunta
+            const cardQuestion = document.createElement('div');
+            cardQuestion.className = 'question';
+            cardQuestion.textContent = pergunta;
+
+            // Criar elemento para resposta (inicialmente escondida)
+            const cardAnswer = document.createElement('div');
+            cardAnswer.className = 'answer';
+            cardAnswer.textContent = resposta;
+
+            // Adicionar evento de clique para mostrar/esconder resposta
+            card.addEventListener('click', () => {
+                cardAnswer.classList.toggle('show');
+            });
+
+            // Adicionar elementos ao cartão
+            card.appendChild(cardCategory);
+            card.appendChild(cardQuestion);
+            card.appendChild(cardAnswer);
+
+            // Adicionar cartão ao container
+            document.getElementById('cards-container').appendChild(card);
+        }
+
+        // Log no console para depuração
+        function logCartao(categoria, pergunta, resposta) {
+            console.log(`Categoria: ${categoria}, Pergunta: ${pergunta}, Resposta: ${resposta}`);
+        }
+
+        // Chamar a função para cada cartão definido em perguntas.js
+        perguntas.forEach(p => {
+            criaCartao(p.categoria, p.pergunta, p.resposta);
+            logCartao(p.categoria, p.pergunta, p.resposta);
+        });
+    </script>
+
+</body>
+
+</html>
 
