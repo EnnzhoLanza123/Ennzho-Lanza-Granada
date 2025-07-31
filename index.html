@@ -4,16 +4,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atividade Flashcards - [Nome do Aluno]</title>
+    <title>Atividade Flashcards - Ennzho Leandro Lanza</title>
     <style>
-        /* Resetando margem e padding para garantir que a estrutura fique certa */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        /* Definindo o layout e a aparência da página */
         body {
             font-family: 'Arial', sans-serif;
             display: flex;
@@ -24,7 +22,6 @@
             padding: 20px;
         }
 
-        /* Cabeçalho com o nome do aluno e a data */
         .header {
             text-align: center;
             margin-bottom: 30px;
@@ -46,118 +43,156 @@
             margin-bottom: 5px;
         }
 
-        /* Estilo para os cartões */
-        .card {
-            background-color: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 300px;
-            padding: 20px;
-            margin: 10px;
-            cursor: pointer;
-            transition: transform 0.2s ease;
+        #cards-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
         }
 
-        /* Efeito de hover nos cartões */
+        .card {
+            background-color: #fff;
+            width: 300px;
+            height: 200px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+            transform-style: preserve-3d;
+            position: relative;
+            text-align: center;
+        }
+
         .card:hover {
-            transform: scale(1.05);
+            transform: rotateY(10deg);
+        }
+
+        .card .front, .card .back {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backface-visibility: hidden;
+            padding: 20px;
+        }
+
+        .card .front {
+            background-color: #4CAF50;
+            color: white;
+        }
+
+        .card .back {
+            background-color: #f0f0f0;
+            color: #333;
+            transform: rotateY(180deg);
+            display: none;
+        }
+
+        .card.show-back .back {
+            display: block;
         }
 
         .category {
-            color: #555;
             font-size: 14px;
-            margin-bottom: 10px;
+            font-weight: bold;
         }
 
         .question {
             font-size: 18px;
             font-weight: bold;
-            margin-bottom: 10px;
+            margin-top: 10px;
         }
 
         .answer {
-            display: none;
-            color: #333;
-            margin-top: 10px;
             font-size: 16px;
         }
 
-        .answer.show {
-            display: block;
-        }
-
-        /* Container dos cartões */
-        #cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
     </style>
 </head>
 
 <body>
 
     <div class="header">
-        <h1>Flashcards de [Nome do Aluno]</h1>
+        <h1>Flashcards de Ennzho Leandro Lanza</h1>
         <p>Atividade de Programação Web - 2,0 pontos</p>
         <p>Data: 31/07/2025</p>
     </div>
 
-    <!-- Container onde os cartões serão inseridos -->
-    <div id="cards-container"></div>
-
-    <!-- Link para o arquivo JavaScript onde as perguntas estão armazenadas -->
-    <script src="perguntas.js"></script>
+    <div id="cards-container">
+        <!-- Os flashcards vão ser inseridos aqui dinamicamente -->
+    </div>
 
     <script>
-        // Função para criar e exibir cartões
+        const perguntas = [
+            {
+                categoria: "Matemática",
+                pergunta: "Qual é a fórmula de Bhaskara?",
+                resposta: "x = (-b ± √(b² - 4ac)) / 2a"
+            },
+            {
+                categoria: "Geografia",
+                pergunta: "Qual é a capital do Brasil?",
+                resposta: "Brasília"
+            },
+            {
+                categoria: "História",
+                pergunta: "Quem foi o primeiro presidente do Brasil?",
+                resposta: "Marechal Deodoro da Fonseca"
+            },
+            {
+                categoria: "Física",
+                pergunta: "O que é velocidade?",
+                resposta: "É a razão entre o deslocamento e o tempo."
+            },
+            {
+                categoria: "Química",
+                pergunta: "O que é a tabela periódica?",
+                resposta: "É uma organização dos elementos químicos com base em suas propriedades."
+            }
+        ];
+
+        // Função para criar e exibir os flashcards
         function criaCartao(categoria, pergunta, resposta) {
-            // Criar elemento do cartão
             const card = document.createElement('div');
             card.className = 'card';
 
-            // Criar elemento para categoria
-            const cardCategory = document.createElement('div');
-            cardCategory.className = 'category';
-            cardCategory.textContent = categoria;
+            // Criar frente do cartão
+            const front = document.createElement('div');
+            front.className = 'front';
+            front.innerHTML = `
+                <div class="category">${categoria}</div>
+                <div class="question">${pergunta}</div>
+            `;
 
-            // Criar elemento para pergunta
-            const cardQuestion = document.createElement('div');
-            cardQuestion.className = 'question';
-            cardQuestion.textContent = pergunta;
+            // Criar verso do cartão
+            const back = document.createElement('div');
+            back.className = 'back';
+            back.innerHTML = `<div class="answer">${resposta}</div>`;
 
-            // Criar elemento para resposta (inicialmente escondida)
-            const cardAnswer = document.createElement('div');
-            cardAnswer.className = 'answer';
-            cardAnswer.textContent = resposta;
+            // Adicionar ambos (frente e verso) ao cartão
+            card.appendChild(front);
+            card.appendChild(back);
 
-            // Adicionar evento de clique para mostrar/esconder resposta
+            // Adicionar evento de clique para virar o cartão
             card.addEventListener('click', () => {
-                cardAnswer.classList.toggle('show');
+                card.classList.toggle('show-back');
             });
 
-            // Adicionar elementos ao cartão
-            card.appendChild(cardCategory);
-            card.appendChild(cardQuestion);
-            card.appendChild(cardAnswer);
-
-            // Adicionar cartão ao container
+            // Adicionar o cartão ao container
             document.getElementById('cards-container').appendChild(card);
         }
 
-        // Log no console para depuração
-        function logCartao(categoria, pergunta, resposta) {
-            console.log(`Categoria: ${categoria}, Pergunta: ${pergunta}, Resposta: ${resposta}`);
-        }
-
-        // Chamar a função para cada cartão definido em perguntas.js
+        // Criar os 5 flashcards
         perguntas.forEach(p => {
             criaCartao(p.categoria, p.pergunta, p.resposta);
-            logCartao(p.categoria, p.pergunta, p.resposta);
         });
     </script>
 
 </body>
 
 </html>
-
